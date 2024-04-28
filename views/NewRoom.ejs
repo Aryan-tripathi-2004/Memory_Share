@@ -1,0 +1,32 @@
+<% layout("./layouts/boilerplate") %>
+
+<body>
+<div class="main col-8 mx-auto p-2 mb-5 mt-5">
+    <h1 class="mb-6 mt-3 fs-1">Add a New Event</h1>
+
+    <form method="POST" action="/Rooms" novalidate class="needs-validation" enctype="multipart/form-data"> 
+
+        <div class="mb-3">
+            <label for="RoomName" class="form-label">EventName</label>
+            <input class="form-control" type="text" name="room[RoomName]" placeholder="Enter Room name" required>
+            <div class="invalid-feedback">Please Enter Event Name.</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="desc" class="form-label">Description</label>
+            <textarea class="form-control" name="room[desc]" placeholder="Enter Room description" required></textarea>
+            <div class="invalid-feedback">Please Enter Event Description.</div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="Image" class="form-label">Upload Image</label>
+            <input class="form-control" type="file" name="room[MainImage]" required>
+            <div class="invalid-feedback">Please choose image</div>
+        </div>
+
+        <button class="btn btn-success mt-2">ADD</button>
+    </form>
+</div>
+
+
+</body>

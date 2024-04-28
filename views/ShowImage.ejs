@@ -1,0 +1,14 @@
+<% layout("./layouts/boilerplate") %>
+
+<div class="Main col-10 mx-auto ">
+    <div class="main d-flex justify-center" >
+        <div class="showImage" style="width: 100vw;  display: flex; justify-content: center; align-items: center;" >
+            <img src="/uploads/Images/<%= image.FileName %>" alt="img" style="width: 70vw; height: 75vh;  border-radius: 0.5rem;" id="DownloadImage">
+        </div> 
+    </div>
+    <div class="DownloadBtn">
+        <button type="button" class=" btn btn-success ms-5 mt-5 mb-4 me-5" id="DownloadButton" style="float: right;">
+            <a href="/uploads/Images/<%= image.FileName %>" download style="text-decoration: none; color: white; right: 0;"> Download Image </a>
+        </button>
+    </div>
+</div>

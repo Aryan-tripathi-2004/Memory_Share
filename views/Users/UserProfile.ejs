@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Instagram Clone</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" href="/CSS/UserProfile.css" />
+      </head>
+
+      <% layout("./layouts/boilerplate") %>
+  <body>
+    <div class="mainDiv col-10 mx-auto mt-3">
+    <header>
+
+      <div class="container d-flex ms-5 ps-5 mb-3">
+        <div class="Left-Div w-45">
+          
+          <div class="profile-image ms-5 ps-5">
+            <img src="/uploads/ProfilePictures/<%= currUser.ProfilePic.FileName %>" alt="">
+          </div>
+
+          <div class="profile-username ps-2  d-flex ms-5 ps-5 mt-1">
+            <div class="first_name me-2 fs-4 ms-4"><%= currUser.FirstName %></div>
+            <div class="last_name ms-1 fs-4"><%= currUser.LastName %></div>
+          </div>
+
+          <form method="POST" action="/userProfile" enctype="multipart/form-data" novalidate class="needs-validation" class="d-flex ">
+            <div class="ProfileChange d-flex mt-3" >
+                <div class="mb-3">
+                  <input class="form-control" type="file" name="NewUser[ProfilePic]" placeholder="choose your Profile Picture " style="outline: none; border: none;" required>
+                  <div class="invalid-feedback">Please Choose Image</div>
+                </div>
+                <div>
+                <button type="submit" class="btn Profile-Change-btn btn-success py-1 px-2">Change</button>
+              </div>
+            </div>
+          </form>
+
+        </div>
+
+        <div class="Right-Div my-5 mt-5 ms-5 ps-5">
+          <div class="profile-username&edit mb-4">
+            <h1 class="profile-user-name fs-3"><%= currUser.username %></h1>
+            <button class="btn profile-edit-btn btn-outline-secondary"><a href="/UserProfile/Edit">Edit Profile</a></button>
+         </div>
+
+          <div class="profile-stats mb-4">
+            <ul>
+              <li><span class="profile-stat-count fs-3" id="ShowEventCount"> </span> Events</li>
+              <li><span class="profile-stat-count fs-3" id="ShowImageCount"> </span> Images</li>
+              <li><span class="profile-stat-count fs-3" id="ShowVideoCount"> </span> Videos</li>
+            </ul>
+          </div>
+
+          <div class="profile-bio mb-4"> <p> <%= currUser.UserBio%> </p> </div>
+        </div>
+      </div>
+
+    </header>
+
+<form id="divForm">
+    <div class="radio-inputs col-10 mx-auto mb-3">
+      <label class="radio"><input type="radio" name="div" value="div1" checked> <span class="name">Events</span></label>
+      <label class="radio"><input type="radio" name="div" value="div2"> <span class="name">Images</span></label>
+      <label class="radio"><input type="radio" name="div" value="div3"> <span class="name">Videos</span></label>
+    </div>
+</form>
+
+<section>
+<div id="div1">
+  <div class="container" class="Profile_Events" id="Profile_Events div1">
+      <div class="gallery">
+        <% var EventCount = 0; %>
+        <div class="gallery-item" tabindex="0">
+          <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+            <% for(let Room of Rooms){ %>
+              <% if(currUser && currUser._id.equals(Room.owner._id)){ %>
+              <a href="/Rooms/<%= Room._id %>">
+      
+                  <div class="card mt-3 col mx-1 " >
+                      <img src="/uploads/EventProfilePic/<%= Room.MainImage %>" class="card-img-top" alt="..." style="height: 20rem !important;" >
+                      <div class="card-body mx-1">
+                          <h5 class="card-title fs-4 " style="overflow: hidden; height: 2rem !important;"><%= Room.RoomName %></h5>
+                          <div class="description" style="overflow: hidden; height: 2.5rem !important;">
+                              <p class="card-text " style="font-size: small;"><%= Room.desc %></p>
+                          </div>
+                      </div>
+                    </div>
+              </a>
+              <% EventCount++; %>
+              <% } %>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</section>
+
+<section>
+<div id="div2" class="Hidden">
+  <div class="container Profile_Images" id="Profile_Images div2">
+      <div class="gallery">
+
+      <div class="gallery-item" tabindex="0">
+        <div class="showImage mt-6 row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+          <% var ImageCount = 0; %>
+          <% for(let Room of Rooms){ %>
+            <% if(currUser && currUser._id.equals(Room.owner._id)){ %>
+              <% for(let image of Room.Images){%>
+
+              <div class="card col mx-2 mt-3" style="width: 18rem;">
+                <img src="/uploads/Images/<%= image.FileName %>" class="card-img-top mt-2" alt="..." style="height: 15rem !important;">
+                <div class="card-body">
+                  <div style="overflow: hidden; height: 2.5rem !important;">
+                    <h5 class="card-title mb-3"><%= image.FileName %></h5>
+                  </div>
+                  <div class="d-flex mt-4">
+                <a href="/Rooms/<%= Room._id %>/showImage/<%= image._id %>">
+                  <button class="btn btn-dark me-4 p-3" style="background-color: grey;">showImage</button>
+                </a>
+
+                <% if(currUser && currUser._id.equals(Room.owner._id)){ %>
+                  <form method="POST" class="mb-1 ms-4" action="/Rooms/<%= Room._id %>/AddImages/<%= image._id %>">
+                    <button class="btn btn-danger p-3" style="background-color: rgb(170, 45, 45);">Delete</button>
+                  </form>
+                <%}%>
+
+                </div>
+                </div>
+              </div>
+              <% ImageCount++; %>
+            <%}%>
+          <%}%>
+          <%}%>
+        </div>
+      </div>
+      </div>
+    </div>
+</div>
+</section>
+
+
+<section>
+  <div id="div3" class="Hidden">
+  <div class="container Profile_Videos" id="Profile_Videos div3">
+      <div class="gallery">
+        <% var VideoCount = 0; %>
+
+          <div class="gallery-item" tabindex="0">
+            <div class="showImage mt-6 row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ms-5 ps-2">
+            <a href="/FutureUpdates">
+            <div class="card mt-3 col mx-1 w-33" >
+              <video src="/TeamPhoto/Worker.mp4" class="card-img-top" preload="auto" autoplay loop muted alt="..." style="height: 20rem !important;" > </video>
+              <div class="card-body mx-1">
+                  <h5 class="card-title fs-4 " style="overflow: hidden; height: 2rem !important;">UH OH!</h5>
+                  <div class="description" style="overflow: hidden; height: 2.5rem !important;">
+                      <p class="card-text " style="font-size: small;">The Features you are looking for does not exist. Our developers try hard to build it as soon as possible.</p>
+                  </div>
+              </div>
+            </div>
+          </a>
+            <% VideoCount++; %>
+            </div>
+          </div>   
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hideDetails" style="visibility: hidden;">
+    <h1 id="EventCount"><%= EventCount %></h1>
+    <h1 id="ImageCount"><%= ImageCount %></h1>
+    <h1 id="VideoCount"><%= VideoCount %></h1>
+</div>
+
+
+<script src="/JS/UserProfile.js"></script>
+
+</body>
